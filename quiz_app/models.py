@@ -60,7 +60,10 @@ class Answer(models.Model):
 
 
 class Submission(models.Model):
-    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
-    answer_owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE, related_name='submissions')
+    answer_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='submissions')
     time_submitted = models.DateTimeField(auto_now_add=True)
-    answer = models.ForeignKey(Answer, on_delete=models.CASCADE)
+    answer = models.ManyToManyField(Answer, on_delete=models.CASCADE, related_name='submissions')
+
+    def __str__(self):
+        return f'This answer submission is by {self.user.username} for {self.quiz.title}'
